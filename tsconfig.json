@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "module": "es6",
+        "target": "es6",
+        "declaration": true,
+        "noImplicitAny": false,
+        "removeComments": true,
+        "sourceMap": false,
+        "outDir": "lib/"
+    },
+    "files": [
+        "src/scroll.ts",
+        "src/easing.ts"
+    ]
+}
