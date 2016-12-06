@@ -1,39 +1,50 @@
-import Easing, { EasingType, EasingPosition } from "./easing";
+import * as Easing from "./easing";
 
 export interface ScrollOptions {
     duration?: number,
     animation?: string,
-    anchors?: Array<string>
+    anchors?: string[]
 }
 
-export default class Scroll implements ScrollOptions {
-    public duration: number;
-    public animation: string;
-    public anchors: Array<string>;
-
-    private scrolling: boolean;
+export default class Scroll {
+    duration: number;
+    anchors: string[];
+    animation: Easing.EasingFunction;
 
     constructor(options: ScrollOptions) {
         this.duration = options.duration || 500;
-        this.animation = options.animation || EasingType[EasingType.linear];
-        this.anchors = options.anchors || this.getAnchors();
+        this.anchors = options.anchors || Scroll.getAnchors();
+        this.animation = Scroll.getAnimation(options.animation) || new Easing.EaseLinear();
 
-        this.scrolling = false;
-
-        this.anchors.forEach(hash => this.setClickEvent(this.getLinkFromHash(hash)));
+        this.anchors.forEach(hash => this.setClickEvent(Scroll.getLinkFromHash(hash)));
     }
 
-    private getAnchors(): Array<string> {
-        const elements: Array<HTMLAnchorElement> = Array.prototype.slice.call(document.getElementsByTagName("a"), 0);
-        const anchors: Array<HTMLAnchorElement> = elements.filter(element => element.href.indexOf("#") !== -1);
+    private static getAnchors(): string[] {
+        const elements: HTMLAnchorElement[] = Array.prototype.slice.call(document.getElementsByTagName("a"), 0);
+        const anchors: HTMLAnchorElement[] = elements.filter(element => element.href.indexOf("#") !== -1);
 
-        return elements.map(element => element.hash);
+        return anchors.map(element => element.hash);
     }
 
-    private getLinkFromHash(hash: string): HTMLAnchorElement {
-        const elements: Array<HTMLAnchorElement> = Array.prototype.slice.call(document.getElementsByTagName("a"), 0);
+    private static getLinkFromHash(hash: string): HTMLAnchorElement {
+        const elements: HTMLAnchorElement[] = Array.prototype.slice.call(document.getElementsByTagName("a"), 0);
 
-        return elements.filter(element => element.hash === hash)[0]; 
+        return elements.filter(element => element.hash === hash)[0];
+    }
+
+    private static getAnimation(animation: string): Easing.EasingFunction {
+        switch (animation) {
+            case "linear":
+                return new Easing.EaseLinear();
+            case "sineIn":
+                return new Easing.EaseSineIn();
+            case "sineOut":
+                return new Easing.EaseSineOut();
+            case "sineInOut":
+                return new Easing.EaseSineInOut();
+            default:
+                return new Easing.EaseLinear();
+        }
     }
 
     private setClickEvent(element: HTMLAnchorElement) {
@@ -41,21 +52,13 @@ export default class Scroll implements ScrollOptions {
             event.stopPropagation();
             event.preventDefault();
 
-            if (!this.scrolling) {
-                this.scroll(element.hash);
-            }
+            this.scroll(element.hash);
         }
     }
 
     private scroll(location: string) {
         const windowPosition: number = window.pageYOffset;
         const locationPosition: number = document.querySelector(location).getBoundingClientRect().top;
-
-        this.scrolling = true;
-
-        const easing: Easing = new Easing({
-            type: EasingType[this.animation]
-        });
 
         let startTime: number;
         const loop = (timestamp: number) => {
@@ -64,22 +67,20 @@ export default class Scroll implements ScrollOptions {
             }
 
             const stopTime: number = startTime + this.duration;
-            const position: EasingPosition = {
+            const options: Easing.EasingOptions = {
                 min: startTime,
                 max: stopTime,
                 val: timestamp
-            }
+            };
 
-            const scrollPosition: number = Math.round(windowPosition + locationPosition * easing.getPosition(position));
+            const scrollPosition: number = Math.round(windowPosition + locationPosition * this.animation.getPosition(options));
 
             if (timestamp < stopTime) {
                 window.scrollTo(0, scrollPosition);
                 window.location.hash = location;
                 window.requestAnimationFrame(loop);
-            } else {
-                this.scrolling = false;
             }
-        }
+        };
 
         window.requestAnimationFrame(loop);
     }
