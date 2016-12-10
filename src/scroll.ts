@@ -7,9 +7,9 @@ export interface ScrollOptions {
 }
 
 export default class Scroll {
-    duration: number;
-    anchors: string[];
-    animation: Easing.EasingFunction;
+    private duration: number;
+    private anchors: string[];
+    private animation: Easing.EasingFunction;
 
     constructor(options: ScrollOptions) {
         this.duration = options.duration || 500;

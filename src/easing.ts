@@ -33,13 +33,13 @@ export class EaseSineIn extends Easing {
 }
 
 export class EaseSineOut extends Easing {
-    getPosition(options: EasingOptions): number {
+    public getPosition(options: EasingOptions): number {
         return Math.sin(EaseSineOut.percentage(options) * Math.PI / 2);
     }
 }
 
 export class EaseSineInOut extends Easing {
-    getPosition(options: EasingOptions): number {
+    public getPosition(options: EasingOptions): number {
         return -(Math.cos(Math.PI * EaseSineInOut.percentage(options)) - 1) / 2;
     }
 }
