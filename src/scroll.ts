@@ -66,6 +66,12 @@ export default class Scroll {
                 return new Easing.EaseCubeOut();
             case "cubeInOut":
                 return new Easing.EaseCubeInOut();
+            case "circleIn":
+                return new Easing.EaseCircleIn();
+            case "circleOut":
+                return new Easing.EaseCircleOut();
+            case "circleInOut":
+                return new Easing.EaseCircleInOut();
             default:
                 return new Easing.EaseLinear();
         }

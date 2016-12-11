@@ -125,3 +125,23 @@ export class EaseCubeInOut extends Easing {
         return val < 0.5 ? 4 * Math.pow(val, 3) : 1 - Math.pow(-2 * val + 2, 3) / 2;
     }
 }
+
+export class EaseCircleIn extends Easing {
+    getPosition(options: EasingOptions): number {
+        return 1 - Math.sqrt(1 - Math.pow(EaseCircleIn.percentage(options), 2));
+    }
+}
+
+export class EaseCircleOut extends Easing {
+    getPosition(options: EasingOptions): number {
+        return Math.sqrt(1 - Math.pow(EaseCircleOut.percentage(options) - 1, 2));
+    }
+}
+
+export class EaseCircleInOut extends Easing {
+    getPosition(options: EasingOptions): number {
+        const val: number = EaseCircleInOut.percentage(options);
+
+        return val < 0.5 ? (1 - Math.sqrt(1 - Math.pow(2 * val, 2))) / 2 : (Math.sqrt(1 - Math.pow(-2 * val + 2, 2)) + 1) / 2;
+    }
+}
