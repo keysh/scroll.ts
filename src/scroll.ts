@@ -42,6 +42,30 @@ export default class Scroll {
                 return new Easing.EaseSineOut();
             case "sineInOut":
                 return new Easing.EaseSineInOut();
+            case "quintIn":
+                return new Easing.EaseQuintIn();
+            case "quintOut":
+                return new Easing.EaseQuintOut();
+            case "quintInOut":
+                return new Easing.EaseQuintInOut();
+            case "quartIn":
+                return new Easing.EaseQuartIn();
+            case "quartOut":
+                return new Easing.EaseQuartOut();
+            case "quartInOut":
+                return new Easing.EaseQuartInOut();
+            case "quadIn":
+                return new Easing.EaseQuadIn();
+            case "quadOut":
+                return new Easing.EaseQuadOut();
+            case "quadInOut":
+                return new Easing.EaseQuadInOut();
+            case "cubeIn":
+                return new Easing.EaseCubeIn();
+            case "cubeOut":
+                return new Easing.EaseCubeOut();
+            case "cubeInOut":
+                return new Easing.EaseCubeInOut();
             default:
                 return new Easing.EaseLinear();
         }
